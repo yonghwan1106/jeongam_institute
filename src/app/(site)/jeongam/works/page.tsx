@@ -1,4 +1,6 @@
+import Image from "next/image";
 import { PageShell } from "@/components/page-shell";
+import { cardAssets } from "@/lib/card-assets";
 
 export const metadata = { title: "정암집" };
 
@@ -90,13 +92,24 @@ export default function WorksPage() {
 
 function Work({ hanja, title, year, desc }: { hanja: string; title: string; year: string; desc: string }) {
   return (
-    <div className="bg-hanji-warm border border-paper-line p-5">
-      <div className="flex items-baseline gap-3 mb-2">
-        <span className="hanja text-xl">{hanja}</span>
-        <span className="font-display font-bold text-ink">{title}</span>
+    <div className="overflow-hidden border border-paper-line bg-hanji-warm">
+      <div className="relative aspect-[4/3] border-b border-paper-line bg-ink/5">
+        <Image
+          src={cardAssets.works.src}
+          alt={cardAssets.works.alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+        <span className="hanja absolute left-3 top-3 flex h-9 min-w-9 items-center justify-center border border-hanji/50 bg-ink/75 px-2 text-lg text-hanji">
+          {hanja}
+        </span>
       </div>
-      <div className="text-xs text-dancheong-red mb-2">{year}</div>
-      <p className="text-sm text-ink-mute leading-relaxed">{desc}</p>
+      <div className="p-5">
+        <div className="text-xs text-dancheong-red mb-2">{year}</div>
+        <h3 className="font-display font-bold text-ink mb-2">{title}</h3>
+        <p className="text-sm text-ink-mute leading-relaxed">{desc}</p>
+      </div>
     </div>
   );
 }

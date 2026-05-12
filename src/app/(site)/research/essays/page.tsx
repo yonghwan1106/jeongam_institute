@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageShell, ComingSoon } from "@/components/page-shell";
+import { cardAssets } from "@/lib/card-assets";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { allPostsByCategoryQuery } from "@/sanity/lib/queries";
 
@@ -18,7 +19,11 @@ export default async function EssaysPage() {
       description="역사 속 이야기를 풀어내는 에세이와 칼럼을 모은 곳입니다."
     >
       {!posts || posts.length === 0 ? (
-        <ComingSoon note="에세이가 곧 올라옵니다. /studio 에서 '에세이' 분류로 글을 발행해주세요." />
+        <ComingSoon
+          note="에세이가 곧 올라옵니다. /studio 에서 '에세이' 분류로 글을 발행해주세요."
+          asset={cardAssets.essay}
+          hanja="文"
+        />
       ) : (
         <ul className="mx-auto max-w-3xl divide-y divide-paper-line border-y border-paper-line bg-hanji-warm">
           {posts.map((p) => (

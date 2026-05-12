@@ -1,4 +1,6 @@
+import Image from "next/image";
 import { PageShell } from "@/components/page-shell";
+import { cardAssets } from "@/lib/card-assets";
 
 export const metadata = { title: "강의·답사 신청" };
 
@@ -11,7 +13,19 @@ export default function ApplyPage() {
       description="아래 양식을 작성해주시면 담당자가 연락드립니다."
     >
       <div className="mx-auto max-w-2xl">
-        <form className="bg-hanji-warm border border-paper-line p-8 space-y-6">
+        <form className="overflow-hidden bg-hanji-warm border border-paper-line p-8 space-y-6">
+          <div className="relative -mx-8 -mt-8 mb-8 aspect-[16/9] border-b border-paper-line bg-ink/5">
+            <Image
+              src={cardAssets.lecture.src}
+              alt={cardAssets.lecture.alt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 640px"
+            />
+            <span className="hanja absolute left-5 top-5 flex h-12 min-w-12 items-center justify-center border border-hanji/50 bg-ink/75 px-3 text-2xl text-hanji">
+              申
+            </span>
+          </div>
           <Field label="이름" name="name" required />
           <Field label="연락처" name="phone" placeholder="010-0000-0000" required />
           <Field label="이메일" name="email" type="email" />

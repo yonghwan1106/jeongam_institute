@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
+import { VisualCard } from "@/components/visual-card";
+import { cardAssets, type CardAsset } from "@/lib/card-assets";
 
 export const metadata = { title: "용인의 역사·문화·인물" };
 
@@ -36,36 +38,42 @@ export default function HeritagePage() {
             name="심곡서원"
             loc="수지구 상현동"
             desc="정암 조광조·학포 양팽손 배향. 사액서원, 도 유형문화재."
+            asset={cardAssets.simgok}
           />
           <Heritage
             hanja="陵"
             name="조선왕릉(서울 외곽)"
             loc="용인 인근"
             desc="용인 자체 왕릉은 없지만 인근 화성·여주 왕릉 답사 거점."
+            asset={cardAssets.pilgrimage}
           />
           <Heritage
             hanja="塚"
             name="포은 정몽주 묘"
             loc="모현면 능원리"
             desc="고려 충신 정몽주의 묘. 사림 학통의 출발점."
+            asset={cardAssets.pilgrimage}
           />
           <Heritage
             hanja="閣"
             name="충렬서원"
             loc="모현면"
             desc="정몽주를 배향한 서원. 심곡서원과 한 묶음으로 답사 가능."
+            asset={cardAssets.chungnyeol}
           />
           <Heritage
             hanja="窯"
             name="용인 가마터"
             loc="처인구 일대"
             desc="조선 도자기의 본향 중 하나. 백자 가마 유적 다수."
+            asset={cardAssets.seoriKiln}
           />
           <Heritage
             hanja="戰"
             name="처인성"
             loc="처인구 남사면"
             desc="고려 김윤후가 몽골군을 격퇴한 전적지(1232년 처인성 전투)."
+            asset={cardAssets.cheoinseong}
           />
         </div>
 
@@ -107,15 +115,20 @@ export default function HeritagePage() {
   );
 }
 
-function Heritage({ hanja, name, loc, desc }: { hanja: string; name: string; loc: string; desc: string }) {
+function Heritage({
+  hanja,
+  name,
+  loc,
+  desc,
+  asset,
+}: {
+  hanja: string;
+  name: string;
+  loc: string;
+  desc: string;
+  asset: CardAsset;
+}) {
   return (
-    <div className="bg-hanji-warm border border-paper-line p-5">
-      <div className="flex items-baseline gap-3 mb-2">
-        <span className="hanja text-2xl">{hanja}</span>
-        <span className="font-display font-bold text-ink">{name}</span>
-      </div>
-      <div className="text-xs text-dancheong-red mb-2">{loc}</div>
-      <p className="text-sm text-ink-mute leading-relaxed">{desc}</p>
-    </div>
+    <VisualCard asset={asset} hanja={hanja} title={name} description={desc} meta={loc} />
   );
 }

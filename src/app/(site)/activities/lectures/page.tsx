@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { PageShell, ComingSoon } from "@/components/page-shell";
+import { PageShell } from "@/components/page-shell";
+import { VisualCard } from "@/components/visual-card";
+import { cardAssets, type CardAsset } from "@/lib/card-assets";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { urlForImage } from "@/sanity/lib/image";
 import { allLecturesQuery } from "@/sanity/lib/queries";
@@ -14,6 +16,37 @@ const TRACK_LABEL: Record<string, string> = {
   special: "특강",
   online: "온라인 (Zoom)",
 };
+
+const TRACK_ASSET: Record<string, CardAsset> = {
+  korean: cardAssets.koreanHistory,
+  world: cardAssets.worldHistory,
+  special: cardAssets.lecture,
+  online: cardAssets.content,
+};
+
+const representativeLectures = [
+  {
+    title: "한국사 아카데미",
+    description: "교과서 흐름과 현장 답사를 잇는 시민 강좌를 준비 중입니다.",
+    meta: "대표 강의",
+    hanja: "韓",
+    asset: cardAssets.koreanHistory,
+  },
+  {
+    title: "세계사 아카데미",
+    description: "동서 문명의 흐름을 오늘의 질문과 함께 읽는 강좌입니다.",
+    meta: "준비 중",
+    hanja: "世",
+    asset: cardAssets.worldHistory,
+  },
+  {
+    title: "온라인 Zoom 특강",
+    description: "멀리 있어도 함께 들을 수 있는 주제별 역사 특강입니다.",
+    meta: "대표 활동",
+    hanja: "學",
+    asset: cardAssets.lecture,
+  },
+];
 
 type Lecture = {
   _id: string;
@@ -39,7 +72,11 @@ export default async function LecturesPage() {
       description="한국사·세계사 아카데미와 특강. 정기 강좌부터 온라인 Zoom 강의까지."
     >
       {!items || items.length === 0 ? (
-        <ComingSoon note="강의 공지가 곧 등록됩니다. 카페에서 모집 안내를 먼저 확인하세요." />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {representativeLectures.map((item) => (
+            <VisualCard key={item.title} {...item} imageAspect="aspect-[3/4]" />
+          ))}
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((l) => (
@@ -58,10 +95,17 @@ export default async function LecturesPage() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <span className="hanja text-6xl text-ink/20 group-hover:text-dancheong-red transition-colors">學</span>
-                  </div>
+                  <Image
+                    src={(TRACK_ASSET[l.track] ?? cardAssets.lecture).src}
+                    alt={(TRACK_ASSET[l.track] ?? cardAssets.lecture).alt}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
                 )}
+                <span className="hanja absolute left-4 top-4 flex h-10 min-w-10 items-center justify-center border border-hanji/50 bg-ink/75 px-2 text-xl text-hanji">
+                  學
+                </span>
               </div>
               <div className="p-5 flex-1 flex flex-col">
                 <div className="text-[11px] tracking-widest text-dancheong-red mb-2">

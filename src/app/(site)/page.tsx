@@ -1,6 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
+import { cardAssets, type CardAsset } from "@/lib/card-assets";
 import { siteConfig } from "@/lib/site-config";
 import { sanityFetch } from "@/sanity/lib/fetch";
+import { urlForImage } from "@/sanity/lib/image";
 import { recentPostsQuery } from "@/sanity/lib/queries";
 
 type RecentPost = {
@@ -10,6 +13,7 @@ type RecentPost = {
   category: "notice" | "press" | "activity" | "essay";
   excerpt?: string;
   publishedAt: string;
+  coverImage?: { asset: { _ref: string }; alt?: string };
 };
 
 export const revalidate = 60;
@@ -45,17 +49,17 @@ function HeroSection() {
             <span className="h-px w-12 bg-gold" />
             <span className="hanja text-sm tracking-[0.3em]">靜 庵 學 院</span>
           </div>
-          <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight text-hanji mb-6">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-7xl font-bold leading-tight text-hanji mb-6">
             나라를 바로<br />세우고자 했던 정신
           </h1>
-          <p className="text-lg md:text-xl text-hanji/75 leading-relaxed mb-10 max-w-2xl">
+          <p className="text-base md:text-xl text-hanji/75 leading-relaxed mb-10 max-w-2xl">
             정암(靜庵) 조광조 선생의 도학정치 정신을 잇고,<br />
             역사·문화 답사와 강의를 통해 우리 동네의 역사를 함께 만들어갑니다.
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
             <Link
               href="/jeongam/life"
-              className="rounded-sm bg-hanji px-7 py-3.5 font-medium text-ink hover:bg-gold hover:text-hanji transition-colors"
+              className="rounded-sm bg-hanji px-7 py-3.5 text-center font-medium text-ink hover:bg-gold hover:text-hanji transition-colors"
             >
               정암을 만나다 →
             </Link>
@@ -63,7 +67,7 @@ function HeroSection() {
               href={siteConfig.cafeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-sm border border-hanji/40 px-7 py-3.5 font-medium text-hanji hover:bg-hanji/10 transition-colors"
+              className="rounded-sm border border-hanji/40 px-7 py-3.5 text-center font-medium text-hanji hover:bg-hanji/10 transition-colors"
             >
               네이버 카페 가입 ↗
             </Link>
@@ -104,11 +108,11 @@ function IntroSection() {
               깊은 골짜기에서<br />
               <span className="hanja">院書谷深</span>
             </h2>
-            <p className="text-ink-soft leading-relaxed mb-4 text-lg">
+            <p className="text-ink-soft leading-relaxed mb-4 text-base md:text-lg [overflow-wrap:anywhere]">
               조광조 역사연구원은 정암 선생을 배향한 <strong className="text-dancheong-red">심곡서원</strong>이 자리한
               용인을 거점으로, 역사 연구와 시민 교육을 잇는 비영리 단체입니다.
             </p>
-            <p className="text-ink-mute leading-relaxed mb-8">
+            <p className="text-ink-mute leading-relaxed mb-8 [overflow-wrap:anywhere]">
               답사, 강의, 환경 정화, 지역 콘텐츠 제작을 통해 역사가 책 속에 머물지 않고
               <strong className="text-ink"> 우리 일상의 자긍심</strong>이 되도록 합니다.
             </p>
@@ -121,10 +125,10 @@ function IntroSection() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <FeatureCard hanja="學" title="역사 강의" desc="한국사·세계사 아카데미, Zoom 온라인 강의" />
-            <FeatureCard hanja="行" title="역사 답사" desc="심곡서원·서산·예산 등 정기 답사 프로그램" />
-            <FeatureCard hanja="淨" title="환경 정화" desc="우리 동네 함께 가꾸는 시민 실천 활동" />
-            <FeatureCard hanja="記" title="콘텐츠" desc="유튜브 쏠쏠한 역사TV, 답사 후기, 인물 연구" />
+            <FeatureCard hanja="學" title="역사 강의" desc="한국사·세계사 아카데미, Zoom 온라인 강의" asset={cardAssets.lecture} />
+            <FeatureCard hanja="行" title="역사 답사" desc="심곡서원·서산·예산 등 정기 답사 프로그램" asset={cardAssets.pilgrimage} />
+            <FeatureCard hanja="淨" title="환경 정화" desc="우리 동네 함께 가꾸는 시민 실천 활동" asset={cardAssets.cleanup} />
+            <FeatureCard hanja="記" title="콘텐츠" desc="유튜브 쏠쏠한 역사TV, 답사 후기, 인물 연구" asset={cardAssets.content} />
           </div>
         </div>
       </div>
@@ -132,40 +136,59 @@ function IntroSection() {
   );
 }
 
-function FeatureCard({ hanja, title, desc }: { hanja: string; title: string; desc: string }) {
+function FeatureCard({ hanja, title, desc, asset }: { hanja: string; title: string; desc: string; asset: CardAsset }) {
   return (
-    <div className="bg-hanji-warm border border-paper-line p-6 hover:border-dancheong-red transition-colors group">
-      <div className="hanja text-3xl mb-3 group-hover:text-dancheong-red transition-colors">{hanja}</div>
-      <h3 className="font-display text-lg font-bold text-ink mb-2">{title}</h3>
-      <p className="text-sm text-ink-mute leading-relaxed">{desc}</p>
+    <div className="group overflow-hidden border border-paper-line bg-hanji-warm transition-colors hover:border-dancheong-red">
+      <div className="relative aspect-[4/3] border-b border-paper-line bg-ink/5">
+        <Image
+          src={asset.src}
+          alt={asset.alt}
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 768px) 50vw, 25vw"
+        />
+        <span className="hanja absolute left-3 top-3 flex h-9 min-w-9 items-center justify-center border border-hanji/50 bg-ink/75 px-2 text-lg text-hanji">
+          {hanja}
+        </span>
+      </div>
+      <div className="p-5">
+        <h3 className="font-display text-lg font-bold text-ink mb-2">{title}</h3>
+        <p className="text-sm text-ink-mute leading-relaxed">{desc}</p>
+      </div>
     </div>
   );
 }
 
-const CATEGORY_HANJA: Record<RecentPost["category"], { tag: string; hanja: string }> = {
-  notice: { tag: "공지", hanja: "告" },
-  press: { tag: "보도", hanja: "報" },
-  activity: { tag: "활동", hanja: "行" },
-  essay: { tag: "에세이", hanja: "文" },
+const CATEGORY_HANJA: Record<RecentPost["category"], { tag: string; hanja: string; asset: CardAsset; baseHref: string }> = {
+  notice: { tag: "공지", hanja: "告", asset: cardAssets.institute, baseHref: "/activities/notices" },
+  press: { tag: "보도", hanja: "報", asset: cardAssets.content, baseHref: "/about/press" },
+  activity: { tag: "활동", hanja: "行", asset: cardAssets.pilgrimage, baseHref: "/activities/notices" },
+  essay: { tag: "에세이", hanja: "文", asset: cardAssets.essay, baseHref: "/research/essays" },
 };
 
 function ActivitiesSection({ posts }: { posts: RecentPost[] }) {
   const fallback = [
-    { tag: "답사", title: "서산과 예산 답사", date: "26.05.01", views: 15, hanja: "行" },
-    { tag: "강의", title: "역사와 문화가 있는 용인", date: "26.05.01", views: 17, hanja: "學" },
-    { tag: "환경", title: "쓰레기도 줍고 역사도 배우고", date: "26.03.23", views: 40, hanja: "淨" },
-    { tag: "아카데미", title: "제1기 한국사 아카데미 강좌", date: "26.02.07", views: 41, hanja: "院" },
+    { tag: "답사", title: "서산과 예산 답사", date: "26.05.01", views: 15, hanja: "行", asset: cardAssets.pilgrimage, href: "/activities/pilgrimage" },
+    { tag: "강의", title: "역사와 문화가 있는 용인", date: "26.05.01", views: 17, hanja: "學", asset: cardAssets.lecture, href: "/activities/lectures" },
+    { tag: "환경", title: "쓰레기도 줍고 역사도 배우고", date: "26.03.23", views: 40, hanja: "淨", asset: cardAssets.cleanup, href: siteConfig.cafeUrl, external: true },
+    { tag: "아카데미", title: "제1기 한국사 아카데미 강좌", date: "26.02.07", views: 41, hanja: "院", asset: cardAssets.koreanHistory, href: "/activities/lectures" },
   ];
-  const items =
-    posts.length > 0
-      ? posts.map((p) => ({
-          tag: CATEGORY_HANJA[p.category]?.tag ?? "글",
-          hanja: CATEGORY_HANJA[p.category]?.hanja ?? "書",
-          title: p.title,
-          date: p.publishedAt.slice(2, 10).replace(/-/g, "."),
-          views: 0,
-        }))
-      : fallback;
+  const cmsItems = posts.map((p) => {
+    const category = CATEGORY_HANJA[p.category] ?? CATEGORY_HANJA.notice;
+
+    return {
+      tag: category.tag,
+      hanja: category.hanja,
+      title: p.title,
+      date: p.publishedAt.slice(2, 10).replace(/-/g, "."),
+      views: 0,
+      asset: category.asset,
+      coverImage: p.coverImage,
+      href: `${category.baseHref}/${p.slug}`,
+      external: false,
+    };
+  });
+  const items = [...cmsItems, ...fallback].slice(0, 4);
 
   return (
     <section className="bg-hanji-warm py-24">
@@ -190,30 +213,68 @@ function ActivitiesSection({ posts }: { posts: RecentPost[] }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {items.map((item, i) => (
-            <article
-              key={i}
-              className="group bg-hanji border border-paper-line hover:border-ink transition-all overflow-hidden"
-            >
-              <div className="aspect-[4/3] bg-ink/5 flex items-center justify-center border-b border-paper-line">
-                <span className="hanja text-5xl text-ink/20 group-hover:text-dancheong-red transition-colors">
-                  {item.hanja}
-                </span>
-              </div>
-              <div className="p-5">
-                <div className="text-[11px] tracking-widest text-dancheong-red mb-2">{item.tag.toUpperCase()}</div>
-                <h3 className="font-display text-base font-bold text-ink mb-3 leading-snug group-hover:text-dancheong-red transition-colors">
-                  {item.title}
-                </h3>
-                <div className="flex justify-between text-xs text-ink-mute">
-                  <span>{item.date}</span>
-                  {item.views > 0 && <span>조회 {item.views}</span>}
-                </div>
-              </div>
-            </article>
+            <ActivityCard key={`${item.title}-${i}`} item={item} />
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+type ActivityItem = {
+  tag: string;
+  hanja: string;
+  title: string;
+  date: string;
+  views: number;
+  asset: CardAsset;
+  href: string;
+  external?: boolean;
+  coverImage?: RecentPost["coverImage"];
+};
+
+function ActivityCard({ item }: { item: ActivityItem }) {
+  const imageSrc = item.coverImage?.asset ? urlForImage(item.coverImage).width(800).height(600).url() : item.asset.src;
+  const imageAlt = item.coverImage?.alt ?? item.asset.alt;
+  const card = (
+    <article className="group h-full overflow-hidden border border-paper-line bg-hanji transition-all hover:border-ink">
+      <div className="relative aspect-[4/3] border-b border-paper-line bg-ink/5">
+        <Image
+          src={imageSrc}
+          alt={imageAlt}
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+        />
+        <span className="hanja absolute left-4 top-4 flex h-10 min-w-10 items-center justify-center border border-hanji/50 bg-ink/75 px-2 text-xl text-hanji">
+          {item.hanja}
+        </span>
+      </div>
+      <div className="p-5">
+        <div className="text-[11px] tracking-widest text-dancheong-red mb-2">{item.tag.toUpperCase()}</div>
+        <h3 className="font-display text-base font-bold text-ink mb-3 leading-snug group-hover:text-dancheong-red transition-colors">
+          {item.title}
+        </h3>
+        <div className="flex justify-between text-xs text-ink-mute">
+          <span>{item.date}</span>
+          {item.views > 0 && <span>조회 {item.views}</span>}
+        </div>
+      </div>
+    </article>
+  );
+
+  if (item.external) {
+    return (
+      <a href={item.href} target="_blank" rel="noopener noreferrer" className="block h-full">
+        {card}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={item.href} className="block h-full">
+      {card}
+    </Link>
   );
 }
 

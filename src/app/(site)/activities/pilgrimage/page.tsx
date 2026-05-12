@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { PageShell, ComingSoon } from "@/components/page-shell";
+import { PageShell } from "@/components/page-shell";
+import { VisualCard } from "@/components/visual-card";
+import { cardAssets } from "@/lib/card-assets";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { urlForImage } from "@/sanity/lib/image";
 import { allPilgrimagesQuery } from "@/sanity/lib/queries";
@@ -19,6 +21,30 @@ type Pilgrimage = {
   photoCount?: number;
 };
 
+const representativePilgrimages = [
+  {
+    title: "심곡서원 답사",
+    description: "정암 조광조 선생을 배향한 연구원의 첫 현장입니다.",
+    meta: "대표 답사",
+    hanja: "院",
+    asset: cardAssets.simgok,
+  },
+  {
+    title: "사림 유적 답사",
+    description: "정몽주·조광조로 이어지는 사림의 길을 걷는 프로그램입니다.",
+    meta: "준비 중",
+    hanja: "行",
+    asset: cardAssets.pilgrimage,
+  },
+  {
+    title: "충렬서원 연계 답사",
+    description: "용인과 인근 역사 현장을 묶어 시민 답사 코스로 준비합니다.",
+    meta: "대표 활동",
+    hanja: "忠",
+    asset: cardAssets.chungnyeol,
+  },
+];
+
 export default async function PilgrimagePage() {
   const items = await sanityFetch<Pilgrimage[]>(allPilgrimagesQuery);
 
@@ -30,7 +56,11 @@ export default async function PilgrimagePage() {
       description="발로 만나는 역사. 심곡서원·서산·예산 등 정기 답사의 기록을 모았습니다."
     >
       {!items || items.length === 0 ? (
-        <ComingSoon note="답사 기록이 곧 올라갑니다. /studio 에서 첫 답사 글을 발행해보세요." />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {representativePilgrimages.map((item) => (
+            <VisualCard key={item.title} {...item} />
+          ))}
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((p) => (
@@ -49,10 +79,17 @@ export default async function PilgrimagePage() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <span className="hanja text-6xl text-ink/20 group-hover:text-dancheong-red transition-colors">行</span>
-                  </div>
+                  <Image
+                    src={cardAssets.pilgrimage.src}
+                    alt={cardAssets.pilgrimage.alt}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
                 )}
+                <span className="hanja absolute left-4 top-4 flex h-10 min-w-10 items-center justify-center border border-hanji/50 bg-ink/75 px-2 text-xl text-hanji">
+                  行
+                </span>
               </div>
               <div className="p-5">
                 <div className="text-[11px] tracking-widest text-dancheong-red mb-2">

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { PageShell, ComingSoon } from "@/components/page-shell";
+import { PageShell } from "@/components/page-shell";
+import { VisualCard } from "@/components/visual-card";
+import { cardAssets } from "@/lib/card-assets";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { urlForImage } from "@/sanity/lib/image";
 import { allGalleryImagesQuery } from "@/sanity/lib/queries";
@@ -15,6 +17,37 @@ type GalleryGroup = {
   date: string;
   images: { asset: { _ref: string }; alt?: string; caption?: string }[];
 };
+
+const representativeGallery = [
+  {
+    title: "답사 현장",
+    description: "현장 사진이 올라오기 전까지 대표 답사 이미지를 보여줍니다.",
+    meta: "갤러리 준비 중",
+    hanja: "行",
+    asset: cardAssets.pilgrimage,
+  },
+  {
+    title: "심곡서원",
+    description: "연구원의 출발점인 심곡서원 사진을 대표 이미지로 둡니다.",
+    meta: "대표 장소",
+    hanja: "院",
+    asset: cardAssets.simgok,
+  },
+  {
+    title: "강의 기록",
+    description: "아카데미와 특강 현장 기록이 이곳에 모입니다.",
+    meta: "대표 활동",
+    hanja: "學",
+    asset: cardAssets.lecture,
+  },
+  {
+    title: "자료 아카이브",
+    description: "답사 후기와 인물 연구 자료를 함께 큐레이션합니다.",
+    meta: "준비 중",
+    hanja: "記",
+    asset: cardAssets.content,
+  },
+];
 
 export default async function GalleryPage() {
   const groups = await sanityFetch<GalleryGroup[]>(allGalleryImagesQuery);
@@ -35,7 +68,11 @@ export default async function GalleryPage() {
       description="답사 현장에서 담은 사진을 한자리에 모았습니다."
     >
       {flat.length === 0 ? (
-        <ComingSoon note="답사 글이 발행되면 첨부된 사진이 이곳에 자동으로 모입니다." />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {representativeGallery.map((item) => (
+            <VisualCard key={item.title} {...item} />
+          ))}
+        </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {flat.map(({ key, img, source }) => (

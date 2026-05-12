@@ -1,5 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
+import { cardAssets } from "@/lib/card-assets";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata = { title: "찾아오시는 길" };
@@ -13,8 +15,19 @@ export default function ContactPage() {
       description="용인을 거점으로 활동합니다. 연락은 이메일과 네이버 카페로."
     >
       <div className="mx-auto max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-hanji-warm border border-paper-line p-8">
-          <div className="hanja text-3xl mb-4">院</div>
+        <div className="overflow-hidden bg-hanji-warm border border-paper-line p-8">
+          <div className="relative -mx-8 -mt-8 mb-6 aspect-[4/3] border-b border-paper-line bg-ink/5">
+            <Image
+              src={cardAssets.simgok.src}
+              alt={cardAssets.simgok.alt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+            <span className="hanja absolute left-4 top-4 flex h-10 min-w-10 items-center justify-center border border-hanji/50 bg-ink/75 px-2 text-xl text-hanji">
+              院
+            </span>
+          </div>
           <h2 className="font-display text-xl font-bold text-ink mb-4">활동 거점</h2>
           <dl className="space-y-3 text-sm">
             <div>
@@ -36,8 +49,19 @@ export default function ContactPage() {
           </p>
         </div>
 
-        <div className="bg-hanji-warm border border-paper-line p-8">
-          <div className="hanja text-3xl mb-4">通</div>
+        <div className="overflow-hidden bg-hanji-warm border border-paper-line p-8">
+          <div className="relative -mx-8 -mt-8 mb-6 aspect-[4/3] border-b border-paper-line bg-ink/5">
+            <Image
+              src={cardAssets.community.src}
+              alt={cardAssets.community.alt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+            <span className="hanja absolute left-4 top-4 flex h-10 min-w-10 items-center justify-center border border-hanji/50 bg-ink/75 px-2 text-xl text-hanji">
+              通
+            </span>
+          </div>
           <h2 className="font-display text-xl font-bold text-ink mb-4">연락 방법</h2>
           <dl className="space-y-4 text-sm">
             <div>

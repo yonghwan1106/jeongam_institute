@@ -1,5 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
+import { cardAssets } from "@/lib/card-assets";
 
 export const metadata = { title: "후원하기" };
 
@@ -10,12 +12,14 @@ export default function SupportPage() {
       label: "한 권의 책",
       desc: "청소년 역사 교실에 책 한 권을 보탭니다.",
       hanja: "冊",
+      asset: cardAssets.books,
     },
     {
       amount: "30,000",
       label: "한 사람의 답사",
       desc: "참여 회원 1인의 답사 차량비를 지원합니다.",
       hanja: "行",
+      asset: cardAssets.pilgrimage,
       highlight: true,
     },
     {
@@ -23,6 +27,7 @@ export default function SupportPage() {
       label: "한 번의 강의",
       desc: "지역 강좌 1회 운영을 함께 만들 수 있습니다.",
       hanja: "學",
+      asset: cardAssets.lecture,
     },
   ];
 
@@ -46,7 +51,18 @@ export default function SupportPage() {
                 추천
               </span>
             )}
-            <div className="hanja text-5xl text-ink/30 mb-4">{t.hanja}</div>
+            <div className="-mx-8 -mt-8 mb-6 relative aspect-[4/3] border-b border-paper-line bg-ink/5">
+              <Image
+                src={t.asset.src}
+                alt={t.asset.alt}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+              <span className="hanja absolute left-4 top-4 flex h-10 min-w-10 items-center justify-center border border-hanji/50 bg-ink/75 px-2 text-xl text-hanji">
+                {t.hanja}
+              </span>
+            </div>
             <div className="font-display text-4xl font-bold text-ink mb-1">
               {t.amount}<span className="text-base ml-1 font-sans text-ink-mute">원</span>
             </div>

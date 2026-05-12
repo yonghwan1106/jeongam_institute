@@ -1,12 +1,13 @@
-import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
+import { VisualCard } from "@/components/visual-card";
+import { cardAssets } from "@/lib/card-assets";
 
 export const metadata = { title: "우리 동네 용인" };
 
 export default function YonginPage() {
   const items = [
-    { href: "/yongin/heritage", title: "용인의 역사·문화·인물", desc: "심곡서원·기흥·수지의 어제와 오늘", hanja: "鄕" },
-    { href: "/yongin/proposals", title: "용인특례시에 바란다", desc: "시정 제안과 시민 의견", hanja: "議" },
+    { href: "/yongin/heritage", title: "용인의 역사·문화·인물", desc: "심곡서원·기흥·수지의 어제와 오늘", hanja: "鄕", asset: cardAssets.simgok },
+    { href: "/yongin/proposals", title: "용인특례시에 바란다", desc: "시정 제안과 시민 의견", hanja: "議", asset: cardAssets.proposals },
   ];
   return (
     <PageShell
@@ -17,15 +18,14 @@ export default function YonginPage() {
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {items.map((s) => (
-          <Link
+          <VisualCard
             key={s.href}
             href={s.href}
-            className="group bg-hanji-warm border border-paper-line p-8 hover:border-dancheong-red transition-all"
-          >
-            <div className="hanja text-4xl mb-4 group-hover:text-dancheong-red transition-colors">{s.hanja}</div>
-            <h3 className="font-display text-xl font-bold text-ink mb-2">{s.title}</h3>
-            <p className="text-sm text-ink-mute">{s.desc}</p>
-          </Link>
+            title={s.title}
+            description={s.desc}
+            hanja={s.hanja}
+            asset={s.asset}
+          />
         ))}
       </div>
     </PageShell>

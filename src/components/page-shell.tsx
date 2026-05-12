@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import { cardAssets, type CardAsset } from "@/lib/card-assets";
 
 export function PageShell({
   eyebrow,
@@ -39,22 +41,43 @@ export function PageShell({
   );
 }
 
-export function ComingSoon({ note }: { note?: string }) {
+export function ComingSoon({
+  note,
+  asset = cardAssets.institute,
+  hanja = "院",
+}: {
+  note?: string;
+  asset?: CardAsset;
+  hanja?: string;
+}) {
   return (
-    <div className="mx-auto max-w-2xl text-center py-16">
-      <div className="hanja text-5xl text-ink/30 mb-6">院</div>
-      <h2 className="font-display text-2xl font-bold text-ink mb-3">콘텐츠 준비 중입니다</h2>
-      <p className="text-ink-mute leading-relaxed mb-8">
-        {note ?? "정성껏 자료를 정리하고 있습니다. 그동안 네이버 카페에서 풍부한 글을 만나보실 수 있습니다."}
-      </p>
-      <Link
-        href="https://cafe.naver.com/jkjhistoy"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 rounded-sm bg-ink px-6 py-3 text-hanji-warm hover:bg-dancheong-red transition-colors"
-      >
-        네이버 카페에서 보기 ↗
-      </Link>
+    <div className="mx-auto max-w-2xl overflow-hidden border border-paper-line bg-hanji-warm text-center">
+      <div className="relative aspect-[16/9] border-b border-paper-line bg-ink/5">
+        <Image
+          src={asset.src}
+          alt={asset.alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 640px"
+        />
+        <span className="hanja absolute left-5 top-5 flex h-12 min-w-12 items-center justify-center border border-hanji/50 bg-ink/75 px-3 text-2xl text-hanji">
+          {hanja}
+        </span>
+      </div>
+      <div className="p-8">
+        <h2 className="font-display text-2xl font-bold text-ink mb-3">콘텐츠 준비 중입니다</h2>
+        <p className="text-ink-mute leading-relaxed mb-8">
+          {note ?? "정성껏 자료를 정리하고 있습니다. 그동안 네이버 카페에서 풍부한 글을 만나보실 수 있습니다."}
+        </p>
+        <Link
+          href="https://cafe.naver.com/jkjhistoy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-sm bg-ink px-6 py-3 text-hanji-warm hover:bg-dancheong-red transition-colors"
+        >
+          네이버 카페에서 보기 ↗
+        </Link>
+      </div>
     </div>
   );
 }

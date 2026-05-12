@@ -1,4 +1,6 @@
+import Image from "next/image";
 import { PageShell } from "@/components/page-shell";
+import { cardAssets } from "@/lib/card-assets";
 
 export const metadata = { title: "도학정치" };
 
@@ -96,10 +98,23 @@ export default function DohakPage() {
 
 function Pillar({ hanja, title, desc }: { hanja: string; title: string; desc: string }) {
   return (
-    <div className="bg-hanji-warm border border-paper-line p-6">
-      <div className="hanja text-3xl mb-3">{hanja}</div>
-      <h3 className="font-display text-lg font-bold text-ink mb-2">{title}</h3>
-      <p className="text-sm text-ink-mute leading-relaxed">{desc}</p>
+    <div className="overflow-hidden border border-paper-line bg-hanji-warm">
+      <div className="relative aspect-[4/3] border-b border-paper-line bg-ink/5">
+        <Image
+          src={cardAssets.dohak.src}
+          alt={cardAssets.dohak.alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
+        <span className="hanja absolute left-3 top-3 flex h-9 min-w-9 items-center justify-center border border-hanji/50 bg-ink/75 px-2 text-lg text-hanji">
+          {hanja}
+        </span>
+      </div>
+      <div className="p-5">
+        <h3 className="font-display text-lg font-bold text-ink mb-2">{title}</h3>
+        <p className="text-sm text-ink-mute leading-relaxed">{desc}</p>
+      </div>
     </div>
   );
 }

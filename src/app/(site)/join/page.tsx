@@ -1,5 +1,6 @@
-import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
+import { VisualCard } from "@/components/visual-card";
+import { cardAssets } from "@/lib/card-assets";
 
 export const metadata = { title: "참여하기" };
 
@@ -12,32 +13,28 @@ export default function JoinPage() {
       description="회원 가입은 네이버 카페에서, 강의·답사 신청은 홈페이지에서, 후원도 한 번에."
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Link
+        <VisualCard
           href="https://cafe.naver.com/jkjhistoy"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group bg-hanji-warm border border-paper-line p-8 hover:border-dancheong-red transition-all"
-        >
-          <div className="hanja text-4xl mb-4 group-hover:text-dancheong-red transition-colors">會</div>
-          <h3 className="font-display text-xl font-bold text-ink mb-2">회원 가입 ↗</h3>
-          <p className="text-sm text-ink-mute">네이버 카페에서 가입하고 회원 활동을 시작하세요.</p>
-        </Link>
-        <Link
+          external
+          title="회원 가입 ↗"
+          description="네이버 카페에서 가입하고 회원 활동을 시작하세요."
+          hanja="會"
+          asset={cardAssets.community}
+        />
+        <VisualCard
           href="/join/apply"
-          className="group bg-hanji-warm border border-paper-line p-8 hover:border-dancheong-red transition-all"
-        >
-          <div className="hanja text-4xl mb-4 group-hover:text-dancheong-red transition-colors">申</div>
-          <h3 className="font-display text-xl font-bold text-ink mb-2">강의·답사 신청</h3>
-          <p className="text-sm text-ink-mute">아카데미 강좌와 정기 답사 프로그램 신청.</p>
-        </Link>
-        <Link
+          title="강의·답사 신청"
+          description="아카데미 강좌와 정기 답사 프로그램 신청."
+          hanja="申"
+          asset={cardAssets.lecture}
+        />
+        <VisualCard
           href="/support"
-          className="group bg-hanji-warm border border-paper-line p-8 hover:border-dancheong-red transition-all"
-        >
-          <div className="hanja text-4xl mb-4 group-hover:text-dancheong-red transition-colors">援</div>
-          <h3 className="font-display text-xl font-bold text-ink mb-2">후원하기</h3>
-          <p className="text-sm text-ink-mute">연구원의 활동을 함께 만들어주세요.</p>
-        </Link>
+          title="후원하기"
+          description="연구원의 활동을 함께 만들어주세요."
+          hanja="援"
+          asset={cardAssets.support}
+        />
       </div>
     </PageShell>
   );

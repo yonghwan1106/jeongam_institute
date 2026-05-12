@@ -1,5 +1,6 @@
-import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
+import { VisualCard } from "@/components/visual-card";
+import { cardAssets } from "@/lib/card-assets";
 
 export const metadata = { title: "주요 활동" };
 
@@ -16,6 +17,7 @@ export default function AboutActivitiesPage() {
         "용인 지역 특강",
       ],
       href: "/activities/lectures",
+      asset: cardAssets.lecture,
     },
     {
       hanja: "行",
@@ -28,6 +30,7 @@ export default function AboutActivitiesPage() {
         "참여 인원 평균 30~50명",
       ],
       href: "/activities/pilgrimage",
+      asset: cardAssets.pilgrimage,
     },
     {
       hanja: "淨",
@@ -40,6 +43,7 @@ export default function AboutActivitiesPage() {
       ],
       href: "https://cafe.naver.com/jkjhistoy",
       external: true,
+      asset: cardAssets.cleanup,
     },
     {
       hanja: "記",
@@ -52,6 +56,7 @@ export default function AboutActivitiesPage() {
         "교과서 한국사·세계사 풀이",
       ],
       href: "/research/essays",
+      asset: cardAssets.content,
     },
   ];
 
@@ -63,31 +68,25 @@ export default function AboutActivitiesPage() {
       description="배우고, 걷고, 나누고, 기록합니다. 연구원의 네 가지 축."
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {pillars.map((p) => {
-          const Card = (
-            <div className="group bg-hanji-warm border border-paper-line p-8 hover:border-dancheong-red transition-all h-full">
-              <div className="flex items-start gap-4">
-                <div className="hanja text-5xl group-hover:text-dancheong-red transition-colors">{p.hanja}</div>
-                <div className="flex-1">
-                  <h3 className="font-display text-xl font-bold text-ink mb-2">{p.title}</h3>
-                  <p className="text-sm text-ink-mute mb-4 leading-relaxed">{p.desc}</p>
-                  <ul className="space-y-1 text-sm text-ink-soft">
-                    {p.bullets.map((b, i) => (
-                      <li key={i} className="pl-3 relative before:absolute before:left-0 before:top-2.5 before:h-px before:w-2 before:bg-ink/30">
-                        {b}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          );
-          return p.external ? (
-            <a key={p.href} href={p.href} target="_blank" rel="noopener noreferrer">{Card}</a>
-          ) : (
-            <Link key={p.href} href={p.href}>{Card}</Link>
-          );
-        })}
+        {pillars.map((p) => (
+          <VisualCard
+            key={p.href}
+            href={p.href}
+            external={p.external}
+            title={p.title}
+            description={p.desc}
+            hanja={p.hanja}
+            asset={p.asset}
+          >
+            <ul className="space-y-1">
+              {p.bullets.map((b, i) => (
+                <li key={i} className="relative pl-3 before:absolute before:left-0 before:top-2.5 before:h-px before:w-2 before:bg-ink/30">
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </VisualCard>
+        ))}
       </div>
     </PageShell>
   );

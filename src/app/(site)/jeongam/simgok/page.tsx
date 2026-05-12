@@ -1,4 +1,6 @@
 import { PageShell } from "@/components/page-shell";
+import { VisualCard } from "@/components/visual-card";
+import { cardAssets } from "@/lib/card-assets";
 
 export const metadata = { title: "심곡서원" };
 
@@ -17,6 +19,16 @@ export default function SimgokPage() {
           1650년(효종 1년) 창건되었으며, 1871년 흥선대원군의 서원 철폐령에도 살아남은
           <strong className="text-ink"> 47개 사액서원 중 하나</strong>입니다.
         </p>
+
+        <div className="mb-10">
+          <VisualCard
+            asset={cardAssets.simgok}
+            hanja="院"
+            title="용인 심곡서원"
+            description="국가유산포털 공식 대표 이미지를 사용한 정암 배향 서원 카드입니다."
+            meta="공식 사진"
+          />
+        </div>
 
         <h2 className="font-display text-2xl font-bold text-ink mt-12 mb-4">위치와 의미</h2>
         <div className="bg-hanji-warm border border-paper-line p-6 mb-8 grid sm:grid-cols-2 gap-4 text-sm">

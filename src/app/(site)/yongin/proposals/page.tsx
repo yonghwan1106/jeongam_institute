@@ -47,7 +47,7 @@ export default function ProposalsPage() {
               rel="noopener noreferrer"
               className="block text-center rounded-sm border border-ink px-5 py-3 text-ink hover:bg-ink hover:text-hanji-warm transition-colors"
             >
-              네이버 카페 '용인특례시에 바란다' ↗
+              네이버 카페 &apos;용인특례시에 바란다&apos; ↗
             </Link>
             <a
               href={`mailto:${siteConfig.contact.email}?subject=%5B%EC%8B%9C%EC%A0%95%20%EC%A0%9C%EC%95%88%5D`}
