@@ -1,12 +1,26 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
+import { sanityFetch } from "@/sanity/lib/fetch";
+import { recentPostsQuery } from "@/sanity/lib/queries";
 
-export default function Home() {
+type RecentPost = {
+  _id: string;
+  title: string;
+  slug: string;
+  category: "notice" | "press" | "activity" | "essay";
+  excerpt?: string;
+  publishedAt: string;
+};
+
+export const revalidate = 60;
+
+export default async function Home() {
+  const posts = await sanityFetch<RecentPost[]>(recentPostsQuery);
   return (
     <>
       <HeroSection />
       <IntroSection />
-      <ActivitiesSection />
+      <ActivitiesSection posts={posts ?? []} />
       <JeongamSection />
       <YoutubeSection />
       <SupportCTA />
@@ -128,13 +142,30 @@ function FeatureCard({ hanja, title, desc }: { hanja: string; title: string; des
   );
 }
 
-function ActivitiesSection() {
-  const items = [
+const CATEGORY_HANJA: Record<RecentPost["category"], { tag: string; hanja: string }> = {
+  notice: { tag: "공지", hanja: "告" },
+  press: { tag: "보도", hanja: "報" },
+  activity: { tag: "활동", hanja: "行" },
+  essay: { tag: "에세이", hanja: "文" },
+};
+
+function ActivitiesSection({ posts }: { posts: RecentPost[] }) {
+  const fallback = [
     { tag: "답사", title: "서산과 예산 답사", date: "26.05.01", views: 15, hanja: "行" },
     { tag: "강의", title: "역사와 문화가 있는 용인", date: "26.05.01", views: 17, hanja: "學" },
     { tag: "환경", title: "쓰레기도 줍고 역사도 배우고", date: "26.03.23", views: 40, hanja: "淨" },
     { tag: "아카데미", title: "제1기 한국사 아카데미 강좌", date: "26.02.07", views: 41, hanja: "院" },
   ];
+  const items =
+    posts.length > 0
+      ? posts.map((p) => ({
+          tag: CATEGORY_HANJA[p.category]?.tag ?? "글",
+          hanja: CATEGORY_HANJA[p.category]?.hanja ?? "書",
+          title: p.title,
+          date: p.publishedAt.slice(2, 10).replace(/-/g, "."),
+          views: 0,
+        }))
+      : fallback;
 
   return (
     <section className="bg-hanji-warm py-24">
@@ -175,7 +206,7 @@ function ActivitiesSection() {
                 </h3>
                 <div className="flex justify-between text-xs text-ink-mute">
                   <span>{item.date}</span>
-                  <span>조회 {item.views}</span>
+                  {item.views > 0 && <span>조회 {item.views}</span>}
                 </div>
               </div>
             </article>
