@@ -63,7 +63,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-hanji/15 flex flex-col sm:flex-row justify-between gap-4 text-xs text-hanji/40">
-          <p>© 2024–{new Date().getFullYear()} 조광조 역사연구원 · {siteConfig.name}. All rights reserved.</p>
+          <p>© 2024–{new Date().getFullYear()} {siteConfig.name}. All rights reserved.</p>
           <p className="font-display">院書谷深 — 심곡서원</p>
         </div>
       </div>

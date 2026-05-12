@@ -1,6 +1,6 @@
 export const siteConfig = {
-  name: "정암연구원",
-  fullName: "조광조 역사연구원",
+  name: "조광조 역사연구원",
+  shortName: "역사연구원",
   slogan: "나라를 바로 세우고자 했던 정신",
   founded: "2024.08.14",
   cafeUrl: "https://cafe.naver.com/jkjhistoy",

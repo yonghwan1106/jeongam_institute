@@ -16,7 +16,7 @@ export function SiteHeader() {
             <span className="font-display text-lg">靜</span>
           </div>
           <div className="leading-tight">
-            <div className="font-display text-lg font-bold text-ink">정암연구원</div>
+            <div className="font-display text-lg font-bold text-ink">조광조 역사연구원</div>
             <div className="text-[11px] tracking-widest text-ink-mute">JEONGAM INSTITUTE</div>
           </div>
         </Link>

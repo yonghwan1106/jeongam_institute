@@ -27,15 +27,15 @@ const myeongjo = Nanum_Myeongjo({
 
 export const metadata: Metadata = {
   title: {
-    default: "정암연구원 · 조광조 역사연구원",
-    template: "%s | 정암연구원",
+    default: "조광조 역사연구원",
+    template: "%s | 조광조 역사연구원",
   },
   description:
-    "나라를 바로 세우고자 했던 정신. 정암 조광조 선생의 도학정치 정신을 잇고 역사·문화 답사와 강의를 통해 우리 동네의 역사를 함께 만들어갑니다.",
+    "나라를 바로 세우고자 했던 정신. 정암(靜庵) 조광조 선생의 도학정치 정신을 잇고 역사·문화 답사와 강의를 통해 우리 동네의 역사를 함께 만들어갑니다.",
   keywords: ["조광조", "정암", "심곡서원", "도학정치", "기묘사림", "용인", "역사연구원", "한국사 아카데미"],
   authors: [{ name: "조광조 역사연구원" }],
   openGraph: {
-    title: "정암연구원 · 조광조 역사연구원",
+    title: "조광조 역사연구원",
     description: "나라를 바로 세우고자 했던 정신",
     locale: "ko_KR",
     type: "website",
