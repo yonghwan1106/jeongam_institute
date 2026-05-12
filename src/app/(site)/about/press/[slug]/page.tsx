@@ -19,15 +19,15 @@ type PostDetail = {
   sourceUrl?: string;
 };
 
-export default async function NoticeDetail({ params }: { params: Promise<{ slug: string }> }) {
+export default async function PressDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await sanityFetch<PostDetail>(postBySlugQuery, { slug });
   if (!post) notFound();
 
   return (
     <PageShell
-      eyebrow="Notice"
-      hanja="告 示"
+      eyebrow="Press"
+      hanja="報"
       title={post.title}
       description={post.publishedAt?.slice(0, 10)}
     >
@@ -63,8 +63,8 @@ export default async function NoticeDetail({ params }: { params: Promise<{ slug:
           </p>
         )}
         <div className="mt-16 pt-8 border-t border-paper-line">
-          <Link href="/activities/notices" className="text-sm text-ink-mute hover:text-dancheong-red">
-            ← 공지사항 목록으로
+          <Link href="/about/press" className="text-sm text-ink-mute hover:text-dancheong-red">
+            ← 언론 보도 목록으로
           </Link>
         </div>
       </article>

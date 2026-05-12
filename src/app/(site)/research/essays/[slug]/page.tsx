@@ -16,21 +16,15 @@ type PostDetail = {
   publishedAt: string;
   coverImage?: { asset: { _ref: string }; alt?: string };
   body?: unknown[];
-  sourceUrl?: string;
 };
 
-export default async function NoticeDetail({ params }: { params: Promise<{ slug: string }> }) {
+export default async function EssayDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await sanityFetch<PostDetail>(postBySlugQuery, { slug });
   if (!post) notFound();
 
   return (
-    <PageShell
-      eyebrow="Notice"
-      hanja="告 示"
-      title={post.title}
-      description={post.publishedAt?.slice(0, 10)}
-    >
+    <PageShell eyebrow="Essay" hanja="文" title={post.title} description={post.publishedAt?.slice(0, 10)}>
       <article className="mx-auto max-w-3xl">
         {post.coverImage?.asset && (
           <div className="mb-10">
@@ -50,21 +44,9 @@ export default async function NoticeDetail({ params }: { params: Promise<{ slug:
           </p>
         )}
         {post.body && <PortableText value={post.body} />}
-        {post.sourceUrl && (
-          <p className="mt-10 text-sm">
-            <a
-              href={post.sourceUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-dancheong-red underline"
-            >
-              원문 보기 ↗
-            </a>
-          </p>
-        )}
         <div className="mt-16 pt-8 border-t border-paper-line">
-          <Link href="/activities/notices" className="text-sm text-ink-mute hover:text-dancheong-red">
-            ← 공지사항 목록으로
+          <Link href="/research/essays" className="text-sm text-ink-mute hover:text-dancheong-red">
+            ← 에세이 목록으로
           </Link>
         </div>
       </article>
