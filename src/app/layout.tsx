@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Serif_KR, Noto_Sans_KR, Nanum_Myeongjo } from "next/font/google";
 import "./globals.css";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
 
 const notoSerif = Noto_Serif_KR({
   variable: "--font-noto-serif",
@@ -52,11 +50,7 @@ export default function RootLayout({
       lang="ko"
       className={`${notoSerif.variable} ${notoSans.variable} ${myeongjo.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
-      </body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }
