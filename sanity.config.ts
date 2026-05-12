@@ -14,6 +14,7 @@ export default defineConfig({
     structureTool({
       structure: (S) =>
         S.list()
+          .id("root")
           .title("콘텐츠")
           .items([
             S.documentTypeListItem("post").title("게시글"),
