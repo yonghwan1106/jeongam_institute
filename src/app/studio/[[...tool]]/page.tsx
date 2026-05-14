@@ -1,12 +1,9 @@
-"use client";
-
 /**
  * Sanity Studio — /studio
  * 환경 변수 NEXT_PUBLIC_SANITY_PROJECT_ID 가 설정되어야 동작합니다.
  */
-import { NextStudio } from "next-sanity/studio";
-import config from "../../../../sanity.config";
 import { isConfigured } from "@/sanity/env";
+import { StudioMount } from "./studio-mount";
 
 export default function StudioPage() {
   if (!isConfigured) {
@@ -55,5 +52,5 @@ NEXT_PUBLIC_SANITY_DATASET=production`}
       </div>
     );
   }
-  return <NextStudio config={config} />;
+  return <StudioMount />;
 }

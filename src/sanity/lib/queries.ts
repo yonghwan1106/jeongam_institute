@@ -1,5 +1,5 @@
 export const recentPostsQuery = /* groq */ `
-  *[_type == "post"] | order(publishedAt desc)[0...4] {
+  *[_type == "post"] | order(publishedAt desc)[0...$limit] {
     _id, title, "slug": slug.current, category, excerpt, publishedAt, coverImage
   }
 `;

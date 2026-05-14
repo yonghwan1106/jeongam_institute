@@ -8,16 +8,10 @@ import { isConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { urlForImage } from "@/sanity/lib/image";
 import { lectureBySlugQuery, lectureSlugsQuery } from "@/sanity/lib/queries";
+import { TRACK_LABEL } from "@/lib/lecture-tracks";
 import type { PortableTextBlock } from "@portabletext/types";
 
 export const revalidate = 3600;
-
-const TRACK_LABEL: Record<string, string> = {
-  korean: "한국사 아카데미",
-  world: "세계사 아카데미",
-  special: "특강",
-  online: "온라인 (Zoom)",
-};
 
 type LectureDetail = {
   _id: string;

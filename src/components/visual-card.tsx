@@ -3,6 +3,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { CardAsset } from "@/lib/card-assets";
 
+type ImageAspect = "aspect-[4/3]" | "aspect-[3/4]" | "aspect-square" | "aspect-video";
+
 type VisualCardProps = {
   asset: CardAsset;
   title: string;
@@ -14,7 +16,7 @@ type VisualCardProps = {
   footer?: ReactNode;
   children?: ReactNode;
   className?: string;
-  imageAspect?: string;
+  imageAspect?: ImageAspect;
 };
 
 export function VisualCard({

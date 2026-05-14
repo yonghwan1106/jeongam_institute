@@ -6,16 +6,10 @@ import { cardAssets, type CardAsset } from "@/lib/card-assets";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { urlForImage } from "@/sanity/lib/image";
 import { allLecturesQuery } from "@/sanity/lib/queries";
+import { TRACK_LABEL } from "@/lib/lecture-tracks";
 
 export const metadata = { title: "강의·아카데미" };
 export const revalidate = 3600;
-
-const TRACK_LABEL: Record<string, string> = {
-  korean: "한국사 아카데미",
-  world: "세계사 아카데미",
-  special: "특강",
-  online: "온라인 (Zoom)",
-};
 
 const TRACK_ASSET: Record<string, CardAsset> = {
   korean: cardAssets.koreanHistory,

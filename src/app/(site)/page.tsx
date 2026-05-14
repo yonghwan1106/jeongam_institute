@@ -19,7 +19,7 @@ type RecentPost = {
 export const revalidate = 3600;
 
 export default async function Home() {
-  const posts = await sanityFetch<RecentPost[]>(recentPostsQuery);
+  const posts = await sanityFetch<RecentPost[]>(recentPostsQuery, { limit: 4 });
   return (
     <>
       <HeroSection />
@@ -175,6 +175,9 @@ function ActivitiesSection({ posts }: { posts: RecentPost[] }) {
   ];
   const cmsItems = posts.map((p) => {
     const category = CATEGORY_HANJA[p.category] ?? CATEGORY_HANJA.notice;
+    const coverImageUrl = p.coverImage?.asset
+      ? urlForImage(p.coverImage).width(800).height(600).url()
+      : undefined;
 
     return {
       tag: category.tag,
@@ -183,12 +186,12 @@ function ActivitiesSection({ posts }: { posts: RecentPost[] }) {
       date: p.publishedAt.slice(2, 10).replace(/-/g, "."),
       views: 0,
       asset: category.asset,
-      coverImage: p.coverImage,
+      coverImageUrl,
       href: `${category.baseHref}/${p.slug}`,
       external: false,
     };
   });
-  const items = [...cmsItems, ...fallback].slice(0, 4);
+  const items = ([...cmsItems, ...fallback] as ActivityItem[]).slice(0, 4);
 
   return (
     <section className="bg-hanji-warm py-24">
@@ -230,12 +233,12 @@ type ActivityItem = {
   asset: CardAsset;
   href: string;
   external?: boolean;
-  coverImage?: RecentPost["coverImage"];
+  coverImageUrl?: string;
 };
 
 function ActivityCard({ item }: { item: ActivityItem }) {
-  const imageSrc = item.coverImage?.asset ? urlForImage(item.coverImage).width(800).height(600).url() : item.asset.src;
-  const imageAlt = item.coverImage?.alt ?? item.asset.alt;
+  const imageSrc = item.coverImageUrl ?? item.asset.src;
+  const imageAlt = item.asset.alt;
   const card = (
     <article className="group h-full overflow-hidden border border-paper-line bg-hanji transition-all hover:border-ink">
       <div className="relative aspect-[4/3] border-b border-paper-line bg-ink/5">
