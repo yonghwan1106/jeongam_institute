@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { cardAssets, type CardAsset } from "@/lib/card-assets";
+import { siteConfig } from "@/lib/site-config";
 
 export function PageShell({
   eyebrow,
@@ -70,7 +71,7 @@ export function ComingSoon({
           {note ?? "정성껏 자료를 정리하고 있습니다. 그동안 네이버 카페에서 풍부한 글을 만나보실 수 있습니다."}
         </p>
         <Link
-          href="https://cafe.naver.com/jkjhistoy"
+          href={siteConfig.cafeUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-sm bg-ink px-6 py-3 text-hanji-warm hover:bg-dancheong-red transition-colors"

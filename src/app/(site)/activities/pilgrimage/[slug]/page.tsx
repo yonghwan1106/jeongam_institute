@@ -1,13 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { PageShell } from "@/components/page-shell";
 import { PortableText } from "@/components/portable-text";
+import { isConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { urlForImage } from "@/sanity/lib/image";
-import { pilgrimageBySlugQuery } from "@/sanity/lib/queries";
+import { pilgrimageBySlugQuery, pilgrimageSlugsQuery } from "@/sanity/lib/queries";
+import type { PortableTextBlock } from "@portabletext/types";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 type PilgrimageDetail = {
   _id: string;
@@ -20,6 +23,30 @@ type PilgrimageDetail = {
   report?: unknown[];
   participantCount?: number;
 };
+
+export async function generateStaticParams() {
+  if (!isConfigured) return [];
+  const slugs = await sanityFetch<string[]>(pilgrimageSlugsQuery);
+  return (slugs ?? []).map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const item = await sanityFetch<PilgrimageDetail>(pilgrimageBySlugQuery, { slug });
+  if (!item) return { title: "답사" };
+  const images = item.coverImage?.asset
+    ? [urlForImage(item.coverImage).width(1200).height(630).url()]
+    : undefined;
+  return {
+    title: item.title,
+    description: item.summary,
+    openGraph: { title: item.title, description: item.summary, images },
+  };
+}
 
 export default async function PilgrimageDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -38,10 +65,10 @@ export default async function PilgrimageDetailPage({ params }: { params: Promise
         {item.coverImage?.asset && (
           <div className="mb-10">
             <Image
-              src={urlForImage(item.coverImage).width(1600).url()}
+              src={urlForImage(item.coverImage).width(1200).url()}
               alt={item.coverImage.alt ?? item.title}
-              width={1600}
-              height={900}
+              width={1200}
+              height={675}
               className="w-full h-auto"
               priority
             />
@@ -52,7 +79,7 @@ export default async function PilgrimageDetailPage({ params }: { params: Promise
             {item.summary}
           </p>
         )}
-        {item.report && <PortableText value={item.report} />}
+        {item.report && <PortableText value={item.report as PortableTextBlock[]} />}
 
         {item.gallery && item.gallery.length > 0 && (
           <section className="mt-16">

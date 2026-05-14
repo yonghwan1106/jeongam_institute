@@ -1,12 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { siteConfig } from "@/lib/site-config";
 
 export function SiteHeader() {
   const [open, setOpen] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(null);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 border-b border-paper-line/60 bg-hanji-warm/85 backdrop-blur-md">
@@ -28,6 +36,10 @@ export function SiteHeader() {
               className="relative"
               onMouseEnter={() => setOpen(item.href)}
               onMouseLeave={() => setOpen(null)}
+              onFocus={() => setOpen(item.href)}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(null);
+              }}
             >
               <Link
                 href={item.href}

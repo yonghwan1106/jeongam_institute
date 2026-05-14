@@ -5,7 +5,7 @@ import { sanityFetch } from "@/sanity/lib/fetch";
 import { allPostsByCategoryQuery } from "@/sanity/lib/queries";
 
 export const metadata = { title: "역사에 풍덩 빠지다" };
-export const revalidate = 60;
+export const revalidate = 3600;
 
 type Row = { _id: string; title: string; slug: string; excerpt?: string; publishedAt: string };
 

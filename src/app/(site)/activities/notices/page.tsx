@@ -5,7 +5,7 @@ import { sanityFetch } from "@/sanity/lib/fetch";
 import { allPostsByCategoryQuery } from "@/sanity/lib/queries";
 
 export const metadata = { title: "공지사항" };
-export const revalidate = 60;
+export const revalidate = 3600;
 
 type PostRow = {
   _id: string;

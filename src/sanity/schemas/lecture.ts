@@ -41,8 +41,7 @@ export const lecture = defineType({
     defineField({
       name: "schedule",
       title: "일정",
-      type: "string",
-      placeholder: "예: 2026.06.07 (토) 14:00",
+      type: "datetime",
     }),
     defineField({
       name: "instructor",

@@ -1,10 +1,15 @@
+export const REVALIDATE_SECONDS = 3600;
+
+const CAFE_URL = "https://cafe.naver.com/jkjhistoy";
+const YOUTUBE_URL = "https://www.youtube.com/results?search_query=쏠쏠한+역사TV";
+
 export const siteConfig = {
   name: "조광조 역사연구원",
   shortName: "역사연구원",
   slogan: "나라를 바로 세우고자 했던 정신",
   founded: "2024.08.14",
-  cafeUrl: "https://cafe.naver.com/jkjhistoy",
-  youtubeUrl: "https://www.youtube.com/results?search_query=쏠쏠한+역사TV",
+  cafeUrl: CAFE_URL,
+  youtubeUrl: YOUTUBE_URL,
   contact: {
     email: "info@jeongam.org",
     region: "경기도 용인특례시",
@@ -64,10 +69,10 @@ export const siteConfig = {
       label: "참여하기",
       href: "/join",
       children: [
-        { label: "회원 가입 (카페)", href: "https://cafe.naver.com/jkjhistoy", external: true },
+        { label: "회원 가입 (카페)", href: CAFE_URL, external: true },
         { label: "강의·답사 신청", href: "/join/apply" },
         { label: "후원하기", href: "/support" },
-        { label: "쏠쏠한 역사TV", href: "https://www.youtube.com/results?search_query=쏠쏠한+역사TV", external: true },
+        { label: "쏠쏠한 역사TV", href: YOUTUBE_URL, external: true },
       ],
     },
   ],

@@ -8,7 +8,7 @@ import { urlForImage } from "@/sanity/lib/image";
 import { allPilgrimagesQuery } from "@/sanity/lib/queries";
 
 export const metadata = { title: "답사 아카이브" };
-export const revalidate = 60;
+export const revalidate = 3600;
 
 type Pilgrimage = {
   _id: string;

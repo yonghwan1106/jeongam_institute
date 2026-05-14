@@ -11,9 +11,13 @@ export const allPostsByCategoryQuery = /* groq */ `
 `;
 
 export const postBySlugQuery = /* groq */ `
-  *[_type == "post" && slug.current == $slug][0]{
+  *[_type == "post" && category == $category && slug.current == $slug][0]{
     _id, title, excerpt, publishedAt, coverImage, body, sourceUrl, category
   }
+`;
+
+export const postSlugsByCategoryQuery = /* groq */ `
+  *[_type == "post" && category == $category && defined(slug.current)][].slug.current
 `;
 
 export const allPilgrimagesQuery = /* groq */ `
@@ -29,8 +33,12 @@ export const pilgrimageBySlugQuery = /* groq */ `
   }
 `;
 
+export const pilgrimageSlugsQuery = /* groq */ `
+  *[_type == "pilgrimage" && defined(slug.current)][].slug.current
+`;
+
 export const allLecturesQuery = /* groq */ `
-  *[_type == "lecture"] | order(_createdAt desc) {
+  *[_type == "lecture"] | order(schedule desc) {
     _id, title, "slug": slug.current, track, session, schedule, instructor, venue,
     coverImage, applyUrl, videoUrl
   }
@@ -41,6 +49,10 @@ export const lectureBySlugQuery = /* groq */ `
     _id, title, track, session, schedule, instructor, venue,
     coverImage, description, videoUrl, applyUrl
   }
+`;
+
+export const lectureSlugsQuery = /* groq */ `
+  *[_type == "lecture" && defined(slug.current)][].slug.current
 `;
 
 export const allGalleryImagesQuery = /* groq */ `

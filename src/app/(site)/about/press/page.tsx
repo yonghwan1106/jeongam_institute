@@ -5,7 +5,7 @@ import { sanityFetch } from "@/sanity/lib/fetch";
 import { allPostsByCategoryQuery } from "@/sanity/lib/queries";
 
 export const metadata = { title: "언론 보도" };
-export const revalidate = 60;
+export const revalidate = 3600;
 
 type Row = { _id: string; title: string; slug: string; excerpt?: string; publishedAt: string };
 

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { PortableText as BasePortableText, PortableTextComponents } from "next-sanity";
+import type { PortableTextBlock } from "@portabletext/types";
 import { urlForImage } from "@/sanity/lib/image";
 
 const components: PortableTextComponents = {
@@ -33,11 +34,23 @@ const components: PortableTextComponents = {
     normal: ({ children }) => <p className="text-ink-soft leading-relaxed my-4">{children}</p>,
   },
   marks: {
-    link: ({ children, value }) => (
-      <a href={value?.href} target="_blank" rel="noopener noreferrer" className="text-dancheong-red underline">
-        {children}
-      </a>
-    ),
+    link: ({ children, value }) => {
+      const rawHref = typeof value?.href === "string" ? value.href : "";
+      const safeHref = /^(https?:|mailto:|tel:|\/)/i.test(rawHref) ? rawHref : "#";
+      const isExternal = /^https?:/i.test(safeHref);
+      return (
+        <a
+          href={safeHref}
+          {...(isExternal && {
+            target: "_blank",
+            rel: "noopener noreferrer nofollow ugc",
+          })}
+          className="text-dancheong-red underline"
+        >
+          {children}
+        </a>
+      );
+    },
     strong: ({ children }) => <strong className="text-ink font-bold">{children}</strong>,
   },
   list: {
@@ -46,6 +59,6 @@ const components: PortableTextComponents = {
   },
 };
 
-export function PortableText({ value }: { value: unknown }) {
-  return <BasePortableText value={value as never} components={components} />;
+export function PortableText({ value }: { value: PortableTextBlock | PortableTextBlock[] | unknown }) {
+  return <BasePortableText value={value as PortableTextBlock[]} components={components} />;
 }

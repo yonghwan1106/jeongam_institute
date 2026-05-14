@@ -1,13 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { PageShell } from "@/components/page-shell";
 import { PortableText } from "@/components/portable-text";
+import { isConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { urlForImage } from "@/sanity/lib/image";
-import { lectureBySlugQuery } from "@/sanity/lib/queries";
+import { lectureBySlugQuery, lectureSlugsQuery } from "@/sanity/lib/queries";
+import type { PortableTextBlock } from "@portabletext/types";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 const TRACK_LABEL: Record<string, string> = {
   korean: "한국사 아카데미",
@@ -29,6 +32,33 @@ type LectureDetail = {
   videoUrl?: string;
   applyUrl?: string;
 };
+
+export async function generateStaticParams() {
+  if (!isConfigured) return [];
+  const slugs = await sanityFetch<string[]>(lectureSlugsQuery);
+  return (slugs ?? []).map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const l = await sanityFetch<LectureDetail>(lectureBySlugQuery, { slug });
+  if (!l) return { title: "강의" };
+  const images = l.coverImage?.asset
+    ? [urlForImage(l.coverImage).width(1200).height(630).url()]
+    : undefined;
+  const description = [TRACK_LABEL[l.track] ?? l.track, l.session, l.schedule]
+    .filter(Boolean)
+    .join(" · ");
+  return {
+    title: l.title,
+    description,
+    openGraph: { title: l.title, description, images },
+  };
+}
 
 export default async function LectureDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -67,7 +97,7 @@ export default async function LectureDetailPage({ params }: { params: Promise<{ 
                 <a
                   href={l.applyUrl}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow ugc"
                   className="block w-full text-center rounded-sm bg-dancheong-red px-5 py-3 font-medium text-hanji-warm hover:bg-ink transition-colors"
                 >
                   신청하기 ↗
@@ -78,7 +108,7 @@ export default async function LectureDetailPage({ params }: { params: Promise<{ 
               <a
                 href={l.videoUrl}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow ugc"
                 className="block w-full text-center rounded-sm border border-ink px-5 py-3 font-medium text-ink hover:bg-ink hover:text-hanji-warm transition-colors"
               >
                 ▶ 영상 보기
@@ -87,7 +117,7 @@ export default async function LectureDetailPage({ params }: { params: Promise<{ 
           </div>
         </div>
 
-        {l.description && <PortableText value={l.description} />}
+        {l.description && <PortableText value={l.description as PortableTextBlock[]} />}
 
         <div className="mt-16 pt-8 border-t border-paper-line">
           <Link href="/activities/lectures" className="text-sm text-ink-mute hover:text-dancheong-red">
@@ -108,3 +138,4 @@ function InfoRow({ label, value }: { label: string; value?: string }) {
     </div>
   );
 }
+

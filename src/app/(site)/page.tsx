@@ -16,7 +16,7 @@ type RecentPost = {
   coverImage?: { asset: { _ref: string }; alt?: string };
 };
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export default async function Home() {
   const posts = await sanityFetch<RecentPost[]>(recentPostsQuery);

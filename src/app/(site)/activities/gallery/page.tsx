@@ -8,7 +8,7 @@ import { urlForImage } from "@/sanity/lib/image";
 import { allGalleryImagesQuery } from "@/sanity/lib/queries";
 
 export const metadata = { title: "사진 갤러리" };
-export const revalidate = 60;
+export const revalidate = 3600;
 
 type GalleryGroup = {
   _id: string;

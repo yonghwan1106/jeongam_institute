@@ -8,7 +8,7 @@ import { urlForImage } from "@/sanity/lib/image";
 import { allLecturesQuery } from "@/sanity/lib/queries";
 
 export const metadata = { title: "강의·아카데미" };
-export const revalidate = 60;
+export const revalidate = 3600;
 
 const TRACK_LABEL: Record<string, string> = {
   korean: "한국사 아카데미",

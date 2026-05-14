@@ -1,55 +1,49 @@
-import Link from "next/link";
-import Image from "next/image";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PageShell } from "@/components/page-shell";
-import { PortableText } from "@/components/portable-text";
+import { PostArticle } from "@/components/post-article";
+import { isConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { urlForImage } from "@/sanity/lib/image";
-import { postBySlugQuery } from "@/sanity/lib/queries";
+import { postBySlugQuery, postSlugsByCategoryQuery } from "@/sanity/lib/queries";
+import type { PostDetail } from "@/sanity/types";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
-type PostDetail = {
-  _id: string;
-  title: string;
-  excerpt?: string;
-  publishedAt: string;
-  coverImage?: { asset: { _ref: string }; alt?: string };
-  body?: unknown[];
-};
+export async function generateStaticParams() {
+  if (!isConfigured) return [];
+  const slugs = await sanityFetch<string[]>(postSlugsByCategoryQuery, { category: "essay" });
+  return (slugs ?? []).map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await sanityFetch<PostDetail>(postBySlugQuery, { slug, category: "essay" });
+  if (!post) return { title: "에세이" };
+  const images = post.coverImage?.asset
+    ? [urlForImage(post.coverImage).width(1200).height(630).url()]
+    : undefined;
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: { title: post.title, description: post.excerpt, images },
+  };
+}
 
 export default async function EssayDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = await sanityFetch<PostDetail>(postBySlugQuery, { slug });
+  const post = await sanityFetch<PostDetail>(postBySlugQuery, { slug, category: "essay" });
   if (!post) notFound();
-
   return (
-    <PageShell eyebrow="Essay" hanja="文" title={post.title} description={post.publishedAt?.slice(0, 10)}>
-      <article className="mx-auto max-w-3xl">
-        {post.coverImage?.asset && (
-          <div className="mb-10">
-            <Image
-              src={urlForImage(post.coverImage).width(1600).url()}
-              alt={post.coverImage.alt ?? post.title}
-              width={1600}
-              height={900}
-              className="w-full h-auto"
-              priority
-            />
-          </div>
-        )}
-        {post.excerpt && (
-          <p className="text-lg text-ink-soft leading-relaxed border-l-2 border-paper-line pl-4 mb-10">
-            {post.excerpt}
-          </p>
-        )}
-        {post.body && <PortableText value={post.body} />}
-        <div className="mt-16 pt-8 border-t border-paper-line">
-          <Link href="/research/essays" className="text-sm text-ink-mute hover:text-dancheong-red">
-            ← 에세이 목록으로
-          </Link>
-        </div>
-      </article>
-    </PageShell>
+    <PostArticle
+      post={post}
+      eyebrow="Essay"
+      hanja="文"
+      backHref="/research/essays"
+      backLabel="에세이 목록으로"
+    />
   );
 }
